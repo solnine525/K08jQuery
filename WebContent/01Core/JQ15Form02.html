@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../common/jquery/jquery-3.6.0.js"></script>
+    <script>
+        $(function(){
+            /*
+            태그선택자 input과 :input의 차이점
+                input => input 태그만 선택한다.
+                :input => input 태그를 포함하여 문서내의 모든 폼 엘리먼트를
+                    선택한다. 즉, textarea, select가 포함된다.
+            */
+            $('#btn1').click(function(){
+                alert("input의 갯수는"+$('input').length);
+                alert("문서내 모든 폼요소의 갯수는:"+$(':input').length);
+            });
+            
+            /*
+            태그명과 속성값 얻어오기
+            -태그명 : 선택자.get(0).tagName 혹은 선택자.tagName으로
+                얻어올 수 있다.
+            -속성값 : 선택자.attr(속성명) 으로 얻어올 수 있다. 
+
+            this의 사용법 :
+                1. tagName과 같은 속성에서 사용시
+                    -> this 혹은 $(this) 둘 다 사용가능함.
+                2. attr()과 같은 메소드 호출시
+                    -> $(this) 형태로만 사용가능함.
+            */
+            $('#btn2').click(function(){
+                var str="";
+                //해당 문서의 모든 입력폼을 얻어와서 태그명과 type 속성값을 문자열로 출력한다.
+                $(':input').each(function(){
+                    str+="태그명:"+this.tagName;
+                    str+="\n";
+                    str+="Typed의 속성값:"+$(this).attr('type');
+                    str+="\n";
+                });
+                alert(str);
+            });
+
+            /*
+            val() : 해당 엘리먼트의 value 속성값을 얻어오거나 설정할 때
+                사용하는 메소드.
+            */
+            $('#btn3').click(function(){
+                //현재 문서의 모든 text 속성을 선택한다.
+                $(':text').css('backgroundColor','silver');
+                //val()을 이용해서 값을 얻어온다.
+                alert('#text1의 value값'+$('#text1').val());
+                //text1의 값을 얻어온 후 val(값) 형태로 text2에 값을 설정한다.
+                var txtVal = $('#text2').val($('#text1').val());
+                alert("txt1의 내용이 txt2로 복사됨")
+            });
+
+            //:(콜론) 뒤에 태그의 type 속성을 기술하면 해당 속성을 가진 모든 태그가 선택된다.
+            $('#btn4').click(function(){
+                var a = $(':text').length;
+                var b = $(':checkbox').length;
+                var c = $(':radio').length;
+                var d = $(':password').length;
+                
+                console.log('text타입', a);
+                console.log('checkbox타입', b);
+                console.log('radio타입', c);
+                console.log('password타입', d);
+            });
+           
+            $('#pwd1').keyup(function(){
+                //패스워드1에 내용을 입력하기 위해 키보드를 뗐을 때
+                $('#pwd2').val(""); //패스워드2의 내용을 지워준다.
+                $('#msg').text(""); //메세지 출력 부분도 지워준다.
+            });
+            
+            //조건2
+            $('#pwd2').keyup(function(){
+                var pStr1 = $('#pwd1').val(); //패스워드1의 내용
+                var pStr2 = $(this).val(); //패스워드2의 내용
+                if(pStr1==pStr2) {
+                    $('#msg').html('<b style="color:red";>암호가 일치합니다</b>');
+                }
+                else{
+                    $('#msg').text('암호가 틀렸습니다.');
+                }
+            });
+
+            //이메일 select 선택시 도메인 부분 채워주기
+            $('#selectEmail').change(function(){
+                //select 태그 선택시 change 이벤트가 발생한다.
+
+                //select 태그에서 선택한 항목의 value를 가져온다.
+                var value = $('#selectEmail option:selected').val();
+                if(value==''){
+                    //"선택하세요" 를 선택하면 readonly 속성을 활성화한다.
+                    $('#email2').attr("readonly",true);
+                    $('#email2').val(""); //값을 비워준다.
+                }
+                else if(value=="direct"){
+                    //"직접입력"을 선택하면 비활성화
+                    $('#email2').attr("readonly",false);
+                    $('#email2').val(""); //값을 비워준다.
+                } 
+                else{
+                    //"도메인"을 선택하면 활성화
+                    $('#email2').attr("readonly",true);
+                    $('#email2').val(value); //선택한 값을 입력한다.
+                }
+            })
+
+        });
+
+    </script>
+</head>
+<body>
+	<h2>form요소와 jQuery</h2>
+	
+	<input type="text" name="text1" id="text1" 
+		value="노트북" />
+	<br/>
+	<input type="text" name="text2" id="text2" value="" />
+	<br/>
+	<input type="password" name="passwd" />
+	<br/>
+	<textarea name="textarea" cols="50" rows="10">나는개발자다</textarea>
+	<br/>
+	<select name="select">
+		<option value="A">에이</option>
+		<option value="B">비이</option>
+		<option value="C">씨이</option>
+	</select>
+	<br/>
+	<input type="checkbox" name="checkbox" />나는체크박스다
+	<br/>
+	<input type="hidden" value="hidden" />여긴hidden박스
+	<br/>
+	<input type="submit" value="submit버튼" />
+	<br/>
+	
+	<div style="margin-top:50px;">
+		<button id="btn1">버튼1</button>
+		<button id="btn2">버튼2</button>
+		<button id="btn3">버튼3</button>
+		<button id="btn4">버튼4</button>
+	</div>
+	
+	
+	<h3>비밀번호 확인기능</h3>
+	<span id="msg"></span>
+	<br/>
+	암호입력 : <input type="password" id="pwd1" />
+	<br/>
+	암호확인 : <input type="password" id="pwd2" />
+	
+	
+	<h3>선택상자에서 선택된값을 텍스트상자에 출력하기</h3>
+	이메일 : <input type="text" id="email1" style="width:100px;"/>
+	@ <input type="text" id="email2" style="width:150px;" readonly />
+	<select id="selectEmail">
+        <option value="">--선택하세요--</option>
+        <option value="direct">직접입력</option>
+		<option value="naver.com">네이버</option>
+		<option value="hanmail.net">다음(한메일)</option>
+		<option value="gmail.com">구글(gmail)</option>
+	</select>
+	
+	<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+	
+    <!-- 	
+	연습문제]비밀번호 확인기능 구현하기
+	1.암호1을 입력할때 무조건 암호2 부분을 비워준다.
+	2.암호2 부분을 입력할때 암호가 일치하게 되면 
+	<span id="msg"> 부분의 텍스트를 빨간색으로 표현한다.
+	3.암호가 틀렸을때 -> 암호가틀립니다(검은색)
+	암호가 일치할때 -> 암호가일치합니다(빨간색)		
+	해당 조건을 만족하는 jQuery코드를 작성하시오.
+	-->
+   
+
+
+   
+   
+
+</body>
+</html>
+
