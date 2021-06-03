@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <style>
+        .important{
+            font-weight: bold; font-size: 2em;
+        }
+        .blue{color:blue;}
+        .black{color:black;}
+        .pink{color:pink;}
+    </style>
+    <script>
+        /*
+        addClass() - 선택한 요소에 하나 이상의 클래스를 추가합니다.
+        removeClass() - 선택한 요소에서 하나 이상의 클래스를 제거합니다.
+        toggleClass() - 선택한 요소에서 클래스 추가 / 제거 간 전환
+        css() - 스타일 속성을 설정하거나 반환합니다.
+        */
+        $(function(){
+            $('#addBtn').click(function(){
+                $('h1, p').addClass("blue");
+                $('#div1').addClass("important");
+            });
+            $('#removeBtn').click(function(){
+                $('h1, p').removeClass("blue");
+                $('#div1').removeClass("important");
+            });
+            $('#toggleBtn').click(function(){
+                $('h1, p').toggleClass("pink");
+                $('#div1').toggleClass("important");
+            });
+        });
+    </script>   
+</head>
+<body>
+    <h1>h1 태그입니다.</h1>
+    <p>paragraph 태그입니다.</p>
+    <div id="div1">div1 입니다.</div>
+    <div id="div2">div2 입니다.</div>
+
+    <button id="addBtn">addClass()</button>
+    <button id="removeBtn">removeClass()</button>
+    <button id="toggleBtn">toggleClass()</button>
+</body>
+</html>

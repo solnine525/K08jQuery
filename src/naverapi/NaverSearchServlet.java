@@ -12,23 +12,40 @@ import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
-public class NaverSearchAPI {
-	
-	public static void main(String[] args) {
-        String clientId = "VtadM0G3cx1vTPLvJkuJ"; //애플리케이션 클라이언트 아이디값"
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+@WebServlet("/NaverSearchAPI.do")
+public class NaverSearchServlet extends HttpServlet{
+
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		
+		String clientId = "VtadM0G3cx1vTPLvJkuJ"; //애플리케이션 클라이언트 아이디값"
         String clientSecret = "5V1cb0ZZXW"; //애플리케이션 클라이언트 시크릿값"
-
-
+        
+        String keyword = req.getParameter("keyword"); //사용자가 입력할 검색어
+        int startNum = Integer.parseInt(req.getParameter("startNum")); //출력할 위치
+        
         String text = null;
         try {
-            text = URLEncoder.encode("가산디지털단지역 맛집", "UTF-8");
+            text = URLEncoder.encode(keyword, "UTF-8");
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException("검색어 인코딩 실패",e);
         }
 
-
-//        String apiURL = "https://openapi.naver.com/v1/search/blog?query=" + text;    // json 결과
-        String apiURL = "https://openapi.naver.com/v1/search/blog.xml?query="+ text; // xml 결과
+        /*
+        네이버 검색 API로 넘겨줄 파라미터
+        	query : 검색어
+        	display : 한 페이지에 출력할 검색 항목 갯수
+        	start : 출력 시작 위치(페이징) 
+         */
+	    String apiURL = "https://openapi.naver.com/v1/search/blog?query=" + text
+	    		+"&display=20&start="+startNum;    // json 결과
+//        String apiURL = "https://openapi.naver.com/v1/search/blog.xml?query="+ text; // xml 결과
 
 
         Map<String, String> requestHeaders = new HashMap<>();
@@ -36,12 +53,15 @@ public class NaverSearchAPI {
         requestHeaders.put("X-Naver-Client-Secret", clientSecret);
         String responseBody = get(apiURL,requestHeaders);
 
-
+        //네이버 검색 API실행시 결과값을 로그로 출력한다.
         System.out.println(responseBody);
-    }
-
-
-    private static String get(String apiUrl, Map<String, String> requestHeaders){
+        
+        //검색결과를 JSON으로 내려받아 서블릿에서 즉시 화면에 출력한다.
+        resp.setContentType("text/html;charset=utf-8");
+        resp.getWriter().write(responseBody);
+	}
+	
+	private static String get(String apiUrl, Map<String, String> requestHeaders){
         HttpURLConnection con = connect(apiUrl);
         try {
             con.setRequestMethod("GET");

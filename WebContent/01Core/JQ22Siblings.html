@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script>
+        $(function(){
+            /*
+            siblings() :
+                선택된 요소 이외의 형제 요소 전체를 선택하는 메소드
+            */
+            $('#btn1').click(function(){
+                $("li").css("backgroundColor","white");
+                $("li.third-item").siblings().css("backgroundColor","red");
+            });
+            $('#btn2').click(function(){
+                $("li").css("backgroundColor","white");
+                /*
+                next()
+                    : 선택된 요소 뒤에 하나의 요소만 선택하는 메소드
+                */
+                $("li.third-item").next().css("backgroundColor","red");
+            });
+            $('#btn3').click(function(){
+                $("li").css("backgroundColor","white");
+                /*
+                nextAll()
+                    : 선택된 요소 뒤의 모든 형제 요소를 선택하는 메소드
+                */
+                $("li.third-item").nextAll().css("backgroundColor","red");
+            });
+            $('#btn4').click(function(){
+                $("li").css("backgroundColor","white");
+                /*
+                nextUntil(선택자)
+                    : 선택된 요소 뒤의 요소들 중 인자로 주어진 선택자
+                    앞부분까지만 선택하는 메소드.
+                */
+                $("li.third-item").nextUntil('#here')
+                    .css("backgroundColor","red");
+            });
+        });    
+    </script>
+</head>
+<body>
+    <ul>
+        <li>임춘</li>
+        <li>오세재</li>
+        <li class="third-item">이인로</li>
+        <li>조통</li>
+        <li>황보황</li>
+        <li id="here">이담지(#here)</li>
+        <li>함순</li>
+    </ul>
+
+    <input type="button" value="siblings()" id="btn1">
+    <input type="button" value="next()" id="btn2">
+    <input type="button" value="nextAll()" id="btn3">
+    <input type="button" value="nextUntil(#here)" id="btn4">
+</body>
+</html>
